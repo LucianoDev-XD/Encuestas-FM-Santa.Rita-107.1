@@ -2,7 +2,7 @@
 import Portada_1 from "../assets_optimized/intendente_vice-Esquina_Crece.webp";
 import Portada_2 from "../assets_optimized/intendente_vice-Vamos_Ctes.webp";
 import Portada_3 from "../assets_optimized/intendente_vice-Ahora_Si.webp";
-import Portada_4 from "../assets_optimized/intendente_vice-Unidos_Con_Esperanza.webp";
+import Portada_4 from "../assets_optimized/intendente_vice-Unidos_con_Esperanza.webp";
 import Portada_5 from "../assets_optimized/intendente-vice_Bienestar-Esquina.webp";
 
 import Logo_1 from "../assets_optimized/logo-Esquina-Crece.webp";
