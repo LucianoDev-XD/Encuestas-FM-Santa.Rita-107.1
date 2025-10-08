@@ -15,13 +15,13 @@ import Logo_5 from "../assets_optimized/Logo-Bienestar.webp";
 import Portada_1_Fallback from "../assets/images/intendente_vice-Esquina_Crece.jpg";
 import Portada_2_Fallback from "../assets/images/intendente_vice-Vamos_Ctes.jpg";
 import Portada_3_Fallback from "../assets/images/intendente_vice-Ahora_Si.jpg";
-import Portada_4_Fallback from "../assets/images/intendente_vice-Unidos_Con_Esperanza.jpg";
+import Portada_4_Fallback from "../assets/images/intendente_vice-Unidos_con_Esperanza.jpg";
 import Portada_5_Fallback from "../assets/images/intendente-vice_Bienestar-Esquina.jpg";
 
 import Logo_1_Fallback from "../assets/logos/logo-Esquina-Crece.jpg";
 import Logo_2_Fallback from "../assets/logos/Logo-Vamos_Ctes.jpeg";
 import Logo_3_Fallback from "../assets/logos/Logo-Ahora-SI.jpg";
-import Logo_4_Fallback from "../assets/logos/Unidos_Con_Esperanza-Logo.jpg";
+import Logo_4_Fallback from "../assets/logos/Unidos_con_Esperanza-Logo.jpg";
 import Logo_5_Fallback from "../assets/logos/Logo-Bienestar.jpg";
 
 export const Candidatos = [
