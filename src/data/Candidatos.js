@@ -8,7 +8,7 @@ import Portada_5 from "../assets_optimized/intendente-vice_Bienestar-Esquina.web
 import Logo_1 from "../assets_optimized/logo-Esquina-Crece.webp";
 import Logo_2 from "../assets_optimized/Logo-Vamos_Ctes.webp";
 import Logo_3 from "../assets_optimized/Logo-Ahora-SI.webp";
-import Logo_4 from "../assets_optimized/Unidos_Con_Esperanza-Logo.webp";
+import Logo_4 from "../assets_optimized/Unidos_con_Esperanza-Logo.webp";
 import Logo_5 from "../assets_optimized/Logo-Bienestar.webp";
 
 // Importamos fallback JPG/JPEG originales
