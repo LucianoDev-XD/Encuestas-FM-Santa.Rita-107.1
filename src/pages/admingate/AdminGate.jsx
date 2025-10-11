@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
 import { auth, db } from "../../services/Firebase.js"
 import {
-  GoogleAuthProvider,
-  signInWithPopup,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut
@@ -41,16 +39,6 @@ export default function AdminGate() {
     })
     return () => unsub()
   }, [])
-
-  const loginGoogle = async () => {
-    const provider = new GoogleAuthProvider()
-    try {
-      await signInWithPopup(auth, provider)
-    } catch (err) {
-      console.error("Error en login Google:", err)
-      setError("Error al iniciar sesión con Google")
-    }
-  }
 
   const loginEmail = async (e) => {
     e.preventDefault()
@@ -115,17 +103,6 @@ export default function AdminGate() {
             </button>
           </form>
 
-          <div className="flex items-center justify-center">
-            <span className="text-gray-400 text-sm">o</span>
-          </div>
-
-          {/* Botón Google */}
-          <button
-            onClick={loginGoogle}
-            className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
-          >
-            Iniciar sesión con Google
-          </button>
         </div>
       </div>
     )

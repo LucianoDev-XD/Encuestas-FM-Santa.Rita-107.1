@@ -25,10 +25,10 @@ function Encuesta() {
     }
 
     try {
-      // 🔹 Garantizamos que haya sesión (anónima si no hay otra)
+      //Garantizamos que haya sesión (anónima si no hay otra)
       await asegurarSesionAnonima()
 
-      // 🔹 Guardamos el voto en un documento con ID = uid
+      //Guardamos el voto en un documento con ID = uid
       await setDoc(doc(db, "votos", auth.currentUser.uid), {
         candidatoId: seleccionado,
         fecha: serverTimestamp()
