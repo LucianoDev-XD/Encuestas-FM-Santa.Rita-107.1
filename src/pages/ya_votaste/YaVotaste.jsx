@@ -7,7 +7,7 @@ function YaVotaste() {
         <h1 className="text-2xl font-bold mb-4">✅ Ya votaste</h1>
         <p className="mb-6">Tu voto fue registrado correctamente. Gracias por participar.</p>
         
-        {/* Botón para resultados (lo activaremos más adelante) */}
+        
         <Link
           to="#"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 active:scale-95 transition"

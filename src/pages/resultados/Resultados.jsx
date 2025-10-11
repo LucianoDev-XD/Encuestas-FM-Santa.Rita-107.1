@@ -49,18 +49,29 @@ function Resultados() {
     return counts
   }, [votos])
 
+  const totalVotos = votos.length
+
+  const resultadosOrdenados = useMemo (() => {
+    const arr = Array.from(conteo.entries()).map(([id, total]) => {
+      const porcentaje = totalVotos > 0 ? ((total / totalVotos) * 100).toFixed(1) : 0
+      return { id, total, porcentaje}
+    })
+  
+    // Ordenar de mayor a menor
+    arr.sort((a, b) => b.total - a.total)
+    return arr
+  }, [conteo, totalVotos])
+
   const chartData = useMemo(() => {
-    const labels = []
-    const data = []
+    const labels = resultadosOrdenados.map(r => etiquetaPorId.get(r.id) || r.id)
+    const data = resultadosOrdenados.map(r => r.total)
+
     const colors = [
       "#2563EB", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6",
       "#14B8A6", "#D946EF", "#22C55E", "#F97316", "#64748B"
     ]
-
-    Array.from(conteo.entries()).forEach(([id, total]) => {
-      labels.push(etiquetaPorId.get(id) || id)
-      data.push(total)
-    })
+    
+    
 
     return {
       labels,
@@ -71,14 +82,11 @@ function Resultados() {
         borderWidth: 2
       }]
     }
-  }, [conteo, etiquetaPorId])
-
-  const totalVotos = votos.length
+  }, [resultadosOrdenados, etiquetaPorId])
 
   const handleLogout = async () => {
     try {
       await signOut(auth)
-      // No redirigimos manualmente, AdminGate se encarga de mostrar el login
     } catch (err) {
       console.error("Error al cerrar sesión:", err)
     }
@@ -135,10 +143,10 @@ function Resultados() {
             <div>
               <h2 className="text-lg font-semibold mb-2">Totales</h2>
               <ul className="space-y-2">
-                {Array.from(conteo.entries()).map(([id, total]) => (
+                {resultadosOrdenados.map(({id, total, porcentaje}) => (
                   <li key={id} className="flex justify-between text-sm sm:text-base">
-                    <span>{etiquetaPorId.get(id) || id}</span>
-                    <span className="font-bold">{total}</span>
+                    <span className="">{etiquetaPorId.get(id) || id}</span>
+                    <span className="font-bold whitespace-nowrap">{porcentaje}% ({total})</span>
                   </li>
                 ))}
               </ul>
