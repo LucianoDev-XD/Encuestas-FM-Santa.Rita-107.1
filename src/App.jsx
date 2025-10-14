@@ -8,7 +8,7 @@ import Contacto from './pages/contacto/Contacto.jsx'
 import Privacidad from './pages/aviso_privacidad/Aviso_privacidad.jsx'
 import AdminGate from "./pages/admingate/AdminGate.jsx"
 import YaVotaste from "./pages/ya_votaste/YaVotaste.jsx"
-import ResultadosPublicos from "./pages/resultadosPublicos/resultadosPublicos.jsx"
+import ResultadosPublicos from "./pages/resultados_publicos/Resultados_Publicos.jsx"
 
 
 
