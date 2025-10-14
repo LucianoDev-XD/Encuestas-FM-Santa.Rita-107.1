@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { db, auth } from "../../services/Firebase.js"
-import { collection, onSnapshot } from "firebase/firestore"
+import { collection, onSnapshot, setDoc, doc, writeBatch } from "firebase/firestore"
 import { signOut } from "firebase/auth"
 import { Candidatos } from "/src/data/Candidatos"
 import { Pie } from "react-chartjs-2"
@@ -12,6 +12,8 @@ function Resultados() {
   const [votos, setVotos] = useState([])
   const [error, setError] = useState(null)
   const [adminInfo, setAdminInfo] = useState(null)
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [publishMsg, setPublishMsg] = useState(null)
 
   useEffect(() => {
     // Guardamos info del admin logueado
@@ -92,6 +94,39 @@ function Resultados() {
     }
   }
 
+  const subirResultados = async () => {
+    try {
+      setIsPublishing(true)
+      setPublishMsg(null)
+  
+      const batch = writeBatch(db)
+      const totales = Object.fromEntries(conteo.entries())
+  
+      for (const [id, total] of Object.entries(totales)) {
+        const candidato = Candidatos.find(c => String(c.id) === String(id))
+      
+        batch.set(
+          doc(db, "resultados", id),
+          {
+            total,
+            intendente: candidato?.intendente || "",
+            vice: candidato?.vice || "",
+            grupo: candidato?.grupo || ""
+          },
+          { merge: true }
+        )
+      }
+  
+      await batch.commit()
+      setPublishMsg("✅ Resultados publicados correctamente")
+    } catch (err) {
+      console.error("Error al publicar resultados:", err)
+      setPublishMsg("❌ Hubo un error al publicar")
+    } finally {
+      setIsPublishing(false)
+    }
+  }
+
   return (
     <div className="min-h-screen px-4 py-6 flex justify-center bg-gray-50">
       <div className="w-full max-w-4xl bg-white border-2 border-blue-300 rounded-xl shadow p-6 flex flex-col">
@@ -156,6 +191,19 @@ function Resultados() {
               <span className="font-semibold">Total de votos: </span>
               <span>{totalVotos}</span>
             </div>
+              <button
+                  onClick={subirResultados}
+                  disabled={isPublishing || totalVotos === 0}
+                  className={`px-4 py-2 rounded text-white ${
+                    isPublishing ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+                  }`}
+              >
+                  {isPublishing ? "Publicando..." : "Congelar y publicar resultados"}
+              </button>
+                
+                  {publishMsg && (
+                    <p className="mt-2 text-sm text-gray-700">{publishMsg}</p>
+                  )}
           </div>
         </div>
       </div>
