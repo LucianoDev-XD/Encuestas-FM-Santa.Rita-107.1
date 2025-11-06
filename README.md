@@ -1,3 +1,1 @@
-Esta es una Web de encuestas hecha para una Radio local.
-
-Estado: Activa.
+Trabajo Practico para la Expo-Tecnica 2025

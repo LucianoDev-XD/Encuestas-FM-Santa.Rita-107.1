@@ -3,7 +3,7 @@ import { auth, db } from "../../services/Firebase.js"
 import { onAuthStateChanged } from "firebase/auth"
 import { doc, getDoc } from "firebase/firestore"
 import { Link } from "react-router-dom"
-import { FiAlertTriangle } from 'react-icons/fi'
+import { FiAlertTriangle, FiCheckCircle } from 'react-icons/fi'
 
 const ENCUESTA_CERRADA = false // false si querés reabrir y true si quiere cerrar
 
@@ -75,8 +75,17 @@ function Home() {
           : (
               <>
                 {yaVoto ? (
-                  <div className="rounded-lg bg-green-100 p-4 font-semibold text-green-800">
-                    ✅ ¡Gracias por participar! Ya has completado la encuesta.
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-center gap-3 rounded-lg bg-green-100 p-4 font-semibold text-green-800">
+                      <FiCheckCircle className="h-6 w-6" />
+                      <span>¡Gracias por participar! Ya has votado.</span>
+                    </div>
+                    <Link
+                      to="/resultado"
+                      className="inline-block rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-700"
+                    >
+                      Ver resultados
+                    </Link>
                   </div>
                 ) : (
                   <Link
