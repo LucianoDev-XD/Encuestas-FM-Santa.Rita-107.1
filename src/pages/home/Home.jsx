@@ -3,8 +3,9 @@ import { auth, db } from "../../services/Firebase.js"
 import { onAuthStateChanged } from "firebase/auth"
 import { doc, getDoc } from "firebase/firestore"
 import { Link } from "react-router-dom"
+import { FiAlertTriangle } from 'react-icons/fi'
 
-const ENCUESTA_CERRADA = true // Cambiá a false si querés reabrir
+const ENCUESTA_CERRADA = false // false si querés reabrir y true si quiere cerrar
 
 function Home() {
   const [yaVoto, setYaVoto] = useState(false)
@@ -38,68 +39,59 @@ function Home() {
   }
 
   return (
-    <div className="min-h-[523px] flex items-center justify-center px-4">
+    <div className="flex min-h-[523px] items-center justify-center bg-gray-100 px-4 py-12">
       <div
-        className="
-          w-full max-w-[650px] 
-          space-y-4 shadow-md border-2 gap-2 text-center 
-          border-blue-300 bg-white rounded-xl 
-          p-6 sm:p-8
-        "
+        className="w-full max-w-2xl space-y-6 rounded-lg bg-white p-8 text-center shadow-lg"
       >
-        <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8"> 
-          Bienvenido a la encuesta sobre los candidatos a Intendentes y Viceintendentes 2025 
-          </h2> 
-        <p className="font-sans text-base sm:text-lg"> 
-          Si fueran hoy las elecciones 
-          </p> 
-        <p className="pb-4 sm:pb-2 font-sans text-base sm:text-lg"> 
-          ¿A quién elegirías como intendente de Esquina? 
-
+        <h2 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+          Bienvenido a la encuesta de la <span className="whitespace-nowrap">Expo-Tecnica 2025</span>
+        </h2>
+        <p className="text-base text-gray-600 sm:text-lg">
+          ¿Que Carrera te gusta mas de la Escuela tecnica?
         </p>
-        {ENCUESTA_CERRADA ? (
-          <>
-            <div className="bg-yellow-100 text-yellow-800 p-4 rounded font-semibold">
-              ⚠️ La encuesta ya está cerrada. Mira los resultados aquí:
-            </div>
-            <Link
-              to="/resultado"
-              className="
-                bg-blue-500 text-white 
-                px-4 py-2 sm:px-4 sm:py-2 
-                rounded hover:bg-blue-600 transition
-                text-sm sm:text-base inline-block
-              "
-            >
-              Ver resultados
-            </Link>
-          </>
-        ) : (
-          <>
-            {yaVoto ? (
-              <div className="bg-green-100 text-green-700 p-4 rounded font-semibold">
-                ✅ Ya votaste. Espera la semana que viene los resultados.
+        <p className="pb-2 text-sm text-gray-500">
+          La Encuesta solo tomara unos minutos
+        </p>
+
+        {/* 
+          // BLOQUE PARA CUANDO LA ENCUESTA ESTÉ CERRADA
+          // Para activarlo, cambia la constante ENCUESTA_CERRADA a 'true'
+        */}
+        {ENCUESTA_CERRADA 
+          ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-3 rounded-lg bg-yellow-100 p-4 font-semibold text-yellow-800">
+                  <FiAlertTriangle className="h-6 w-6" />
+                  <span>La encuesta ya está cerrada.</span>
+                </div>
+                <Link
+                  to="/resultado"
+                  className="inline-block rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-700"
+                >
+                  Ver resultados
+                </Link>
               </div>
-            ) : (
-              <Link
-                to="/encuesta"
-                className="
-                  bg-blue-500 text-white 
-                  px-4 py-2 sm:px-4 sm:py-2 
-                  rounded hover:bg-blue-600 transition
-                  text-sm sm:text-base
-                "
-              >
-                Iniciar encuesta
-              </Link>
-            )}
-          </>
-        )}
+            ) 
+          : (
+              <>
+                {yaVoto ? (
+                  <div className="rounded-lg bg-green-100 p-4 font-semibold text-green-800">
+                    ✅ ¡Gracias por participar! Ya has completado la encuesta.
+                  </div>
+                ) : (
+                  <Link
+                    to="/encuesta"
+                    className="inline-block rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    Iniciar encuesta
+                  </Link>
+                )}
+              </>
+            )
+        }
       </div>
     </div>
   )
 }
 
 export default Home
-
-

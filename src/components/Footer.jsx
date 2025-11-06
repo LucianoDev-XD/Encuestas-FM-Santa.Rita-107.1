@@ -1,43 +1,47 @@
-import { Link } from "react-router-dom"
+import { FaInstagram } from 'react-icons/fa'
 
 function Footer() {
+  const developerInstagramUrl = 'https://www.instagram.com/_lucianodev/'
+
   return (
-    <footer className="bg-gray-200 text-gray-700 border-t border-gray-300">
-      <div
-        className="
-          max-w-6xl mx-auto 
-          flex flex-col sm:flex-col md:flex-row 
-          justify-center md:justify-around 
-          items-center 
-          gap-2 sm:gap-3 md:gap-6 
-          px-4 py-6
-          text-center md:text-left
-        "
-      >
-        {/* Texto de copyright */}
-        <p className="text-xs sm:text-sm">
-          © {new Date().getFullYear()} FM Santa.Rita 107.7 - Todos los derechos reservados
-        </p>
+    <footer className="bg-gray-800 p-6 text-center text-white">
+      <div className="mx-auto max-w-6xl">
+        {/* Información de la Tutora */}
+        <div className="mb-4 flex items-center justify-center gap-2">
+          <p className="text-sm">Tutora de Septimo Año: Aranda Malena</p>
+          {/* 
+            // Descomenta este bloque para añadir el enlace al Instagram de la tutora
+            <a 
+              href="URL_INSTAGRAM_TUTORA" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              aria-label="Instagram de la tutora"
+            >
+              <FaInstagram className="h-5 w-5 transition-transform hover:scale-110" />
+            </a>
+          */}
+        </div>
 
-        {/* Enlace al aviso de privacidad */}
-        <Link
-          to="/privacidad"
-          className="text-xs sm:text-sm text-blue-600 hover:underline"
-        >
-          Aviso de privacidad
-        </Link>
-
-        {/* Crédito personal */}
-        <p className="text-xs sm:text-sm">
-          Desarrollado por{" "}
+        {/* Información del Desarrollador */}
+        <div className="mb-4">
+          <p className="text-sm">
+            Proyecto Desarrollado por:{' '}
           <a
-            href="https://www.instagram.com/_lucianodev/"
+            href={developerInstagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-pink-600 hover:underline"
+            aria-label="Instagram del desarrollador"
+            className="inline-flex items-center gap-2 font-semibold text-cyan-400 transition-colors hover:text-cyan-300"
           >
-            Luciano A. Fabio Flores
+              Luciano A. Fabio Flores
+              <FaInstagram className="h-5 w-5" />
           </a>
+          </p>
+        </div>
+
+        {/* Copyright */}
+        <p className="text-xs text-gray-400">
+          © {new Date().getFullYear()} Escuela Tecnica Dr. Juan Ramon Vidal. Todos los derechos reservados.
         </p>
       </div>
     </footer>
