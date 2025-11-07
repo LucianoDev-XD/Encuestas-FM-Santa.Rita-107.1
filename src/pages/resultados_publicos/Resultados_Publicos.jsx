@@ -5,6 +5,94 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { PreguntasEncuesta as preguntas } from "../../data/Preguntas.js";
 import { FiTrendingUp, FiTrendingDown, FiAward, FiMeh } from 'react-icons/fi';
 
+// Componente para la sección de "Puntos Clave"
+const PuntosClave = ({ destacados }) => {
+  if (!destacados || destacados.length < 2) return null;
+
+  const masVotadaCarrera = destacados[0]?.masVotado?.texto || 'N/A';
+  const masVotadaExpo = destacados[1]?.masVotado?.texto || 'N/A';
+  const menosVotadaCarrera = destacados[0]?.menosVotado?.texto || 'N/A';
+  const menosVotadaExpo = destacados[1]?.menosVotado?.texto || 'N/A';
+
+  return (
+    <div className="mb-8 p-4 border-b-2 border-gray-100">
+      <h3 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-4">Puntos Clave</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+        {/* Más Votados */}
+        <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+          <FiAward className="mx-auto h-8 w-8 text-green-500 mb-3" />
+          <p className="text-base font-semibold text-green-800 mb-2">Los Favoritos</p>
+          <div className="space-y-2">
+            <p className="text-sm text-gray-500 sm:text-base">Carrera: <span className="block text-base font-bold text-green-900 sm:text-lg">{masVotadaCarrera}</span></p>
+            <p className="text-sm text-gray-500 sm:text-base">Exposición: <span className="block text-base font-bold text-green-900 sm:text-lg">{masVotadaExpo}</span></p>
+          </div>
+        </div>
+        {/* Menos Votados */}
+        <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+          <FiMeh className="mx-auto h-8 w-8 text-orange-500 mb-3" />
+          <p className="text-base font-semibold text-orange-800 mb-2">A Mejorar</p>
+          <div className="space-y-2">
+            <p className="text-sm text-gray-500 sm:text-base">Carrera: <span className="block text-base font-bold text-orange-900 sm:text-lg">{menosVotadaCarrera}</span></p>
+            <p className="text-sm text-gray-500 sm:text-base">Exposición: <span className="block text-base font-bold text-orange-900 sm:text-lg">{menosVotadaExpo}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente para renderizar los resultados de una pregunta
+const BloqueResultados = ({ pregunta }) => {
+  const totalVotosPregunta = useMemo(
+    () => pregunta.opciones.reduce((acc, r) => acc + r.total, 0),
+    [pregunta.opciones]
+  );
+
+  const resultadosOrdenados = useMemo(() => {
+    return [...pregunta.opciones]
+      .map((r) => ({
+        ...r,
+        porcentaje: totalVotosPregunta > 0 ? ((r.total / totalVotosPregunta) * 100).toFixed(1) : "0.0",
+      }))
+      .sort((a, b) => b.total - a.total);
+  }, [pregunta.opciones, totalVotosPregunta]);
+
+  if (totalVotosPregunta === 0) {
+    return (
+      <div className="space-y-3">
+        <h2 className="text-base font-semibold text-gray-800 sm:text-lg">{pregunta.texto}</h2>
+        <p className="text-sm text-gray-500">Aún no hay votos para esta pregunta.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <h2 className="text-base font-semibold text-gray-800 sm:text-lg">{pregunta.texto}</h2>
+      <div className="space-y-2">
+        {resultadosOrdenados.map(({ id, texto, total, porcentaje }) => (
+          <div key={id} className="text-ms">
+            <div className="flex justify-between items-center mb-1">
+              <p className="font-medium text-gray-700">{texto}</p>
+              <p className="font-bold text-gray-800">
+                {total} <span className="font-normal text-gray-500">({porcentaje}%)</span>
+              </p>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full"
+                style={{ width: `${porcentaje}%` }}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="text-right text-sm text-gray-500 pt-1">
+        Total: {totalVotosPregunta} votos
+      </p>
+    </div>
+  );
+};
 
 function ResultadosPublicos() {
   const [resultados, setResultados] = useState([]);
@@ -104,55 +192,11 @@ function ResultadosPublicos() {
     );
   }
 
-  // Componente para renderizar los resultados de una pregunta
-  const BloqueResultados = ({ pregunta }) => {
-    const totalVotosPregunta = useMemo(
-      () => pregunta.opciones.reduce((acc, r) => acc + r.total, 0),
-      [pregunta.opciones]
-    );
-
-    const resultadosOrdenados = useMemo(() => {
-      const arr = pregunta.opciones.map((r) => {
-        const porcentaje = totalVotosPregunta > 0 ? ((r.total / totalVotosPregunta) * 100).toFixed(1) : 0;
-        return { ...r, porcentaje };
-      });
-      arr.sort((a, b) => b.total - a.total);
-      return arr;
-    }, [pregunta.opciones, totalVotosPregunta]);
-
-    return (
-      <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-gray-800">{pregunta.texto}</h2>
-        <div className="space-y-2">
-          {resultadosOrdenados.map(({ id, texto, total, porcentaje }) => (
-            <div key={id} className="text-ms">
-              <div className="flex justify-between items-center mb-1">
-                <p className="font-medium text-gray-700">{texto}</p>
-                <p className="font-bold text-gray-800">
-                  {total} <span className="font-normal text-gray-500">({porcentaje}%)</span>
-                </p>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-blue-600 h-2 rounded-full"
-                  style={{ width: `${porcentaje}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className="text-right text-sm text-gray-500 pt-1">
-          Total: {totalVotosPregunta} votos
-        </p>
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen px-4 py-6 flex justify-center bg-gray-50">
       <div className="w-full max-w-4xl bg-white border-2 border-blue-300 rounded-xl shadow p-6 flex flex-col">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
-          Resultados de la Encuesta Expo-Técnica
+        <h2 className="text-xl font-bold text-center sm:text-2xl md:text-3xl mb-6">
+          Resultados de la Encuesta
         </h2>
 
         {error && (
@@ -163,30 +207,7 @@ function ResultadosPublicos() {
 
         {resultados.length > 0 && !cargando && !error ? (
           <>
-            {/* Sección de Destacados */}
-            <div className="mb-8 p-4 border-b-2 border-gray-100">
-              <h3 className="text-xl font-bold text-center text-gray-800 mb-4">Puntos Clave</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-                {/* Más Votados */}
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <FiAward className="mx-auto h-8 w-8 text-green-500 mb-3" />
-                  <p className="text-base font-semibold text-green-800 mb-2">Los Favoritos</p>
-                  <div className="space-y-2">
-                    <p className="text-base text-gray-500">Carrera: <span className="block text-lg font-bold text-green-900">{destacados[0]?.masVotado?.texto || 'N/A'}</span></p>
-                    <p className="text-base text-gray-500">Exposición: <span className="block text-lg font-bold text-green-900">{destacados[1]?.masVotado?.texto || 'N/A'}</span></p>
-                  </div>
-                </div>
-                {/* Menos Votados */}
-                <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
-                  <FiMeh className="mx-auto h-8 w-8 text-orange-500 mb-3" />
-                  <p className="text-base font-semibold text-orange-800 mb-2">A Mejorar</p>
-                  <div className="space-y-2">
-                    <p className="text-base text-gray-500">Carrera: <span className="block text-lg font-bold text-orange-900">{destacados[0]?.menosVotado?.texto || 'N/A'}</span></p>
-                    <p className="text-base text-gray-500">Exposición: <span className="block text-lg font-bold text-orange-900">{destacados[1]?.menosVotado?.texto || 'N/A'}</span></p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PuntosClave destacados={destacados} />
 
             {/* Resultados Detallados */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">

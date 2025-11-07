@@ -64,8 +64,8 @@ function Encuesta() {
   const pregunta = PreguntasEncuesta[preguntaActual]
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-12">
-      <div className="w-full max-w-2xl space-y-8 rounded-lg bg-white p-8 shadow-lg">
+    <div className="flex items-center justify-center bg-gray-100 px-4 py-12">
+      <div className="w-full max-w-2xl space-y-8 rounded-lg bg-white p-6 shadow-lg sm:p-8">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 sm:text-3xl">Encuesta Expo-Técnica</h2>
           <p className="mt-2 text-gray-600">Tu opinión es importante para nosotros.</p>

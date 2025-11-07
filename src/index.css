@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
-:root{
-  background: #F3F4F6;
-  margin: 0;
-  padding: 0;
-  overflow-y: none;
+/* Añade estas nuevas reglas de animación */
+@keyframes marquee {
+  from {
+    transform: translateX(130%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 45s linear infinite;
 }

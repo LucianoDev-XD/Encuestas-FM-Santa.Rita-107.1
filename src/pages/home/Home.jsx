@@ -1,56 +1,56 @@
-import { useEffect, useState } from "react"
-import { auth, db } from "../../services/Firebase.js"
-import { onAuthStateChanged } from "firebase/auth"
-import { doc, getDoc } from "firebase/firestore"
-import { Link } from "react-router-dom"
-import { FiAlertTriangle, FiCheckCircle } from 'react-icons/fi'
+import { useEffect, useState } from "react";
+import { db, auth } from "../../services/Firebase.js";
+import { onAuthStateChanged } from "firebase/auth"; // onAuthStateChanged ya es modular
+import { doc, getDoc } from "firebase/firestore"; 
+import { Link } from "react-router-dom";
+import { FiAlertTriangle, FiCheckCircle } from 'react-icons/fi';
 
-const ENCUESTA_CERRADA = false // false si querés reabrir y true si quiere cerrar
+const ENCUESTA_CERRADA = false; // false si querés reabrir y true si quiere cerrar
 
 function Home() {
-  const [yaVoto, setYaVoto] = useState(false)
-  const [cargando, setCargando] = useState(true)
+  const [yaVoto, setYaVoto] = useState(false);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     if (!ENCUESTA_CERRADA) {
       const unsub = onAuthStateChanged(auth, async (user) => {
         if (user) {
           try {
-            const votoDoc = await getDoc(doc(db, "votos", user.uid))
-            setYaVoto(votoDoc.exists())
+            const votoDoc = await getDoc(doc(db, "votos", user.uid));
+            setYaVoto(votoDoc.exists());
           } catch (err) {
-            console.error("Error verificando voto:", err)
+            console.error("Error verificando voto:", err);
           }
         }
-        setCargando(false)
-      })
-      return () => unsub()
+        setCargando(false);
+      });
+      return () => unsub();
     } else {
-      setCargando(false)
+      setCargando(false);
     }
-  }, [])
+  }, []);
 
   if (cargando) {
     return (
-      <div className="min-h-[523px] flex items-center justify-center">
+      <div className="flex items-center justify-center py-12">
         <p>Cargando...</p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="flex min-h-[523px] items-center justify-center bg-gray-100 px-4 py-12">
+    <div className="flex items-center justify-center px-4 py-12">
       <div
-        className="w-full max-w-2xl space-y-6 rounded-lg bg-white p-8 text-center shadow-lg"
+        className="w-full max-w-lg space-y-6 rounded-lg bg-white p-6 text-center shadow-lg sm:p-8"
       >
-        <h2 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+        <h2 className="text-xl font-bold text-gray-800 sm:text-2xl">
           Bienvenido a la encuesta de la <span className="whitespace-nowrap">Expo-Tecnica 2025</span>
         </h2>
-        <p className="text-base text-gray-600 sm:text-lg">
-          ¿Que Carrera te gusta mas de la Escuela tecnica?
+        <p className="text-sm text-gray-600 sm:text-base">
+          ¿Qué Carrera te gusta más de la Escuela técnica?
         </p>
-        <p className="pb-2 text-sm text-gray-500">
-          La Encuesta solo tomara unos minutos
+        <p className="pb-2 text-xs text-gray-500 sm:text-sm">
+          La Encuesta solo tomará unos minutos
         </p>
 
         {/* 
@@ -66,7 +66,7 @@ function Home() {
                 </div>
                 <Link
                   to="/resultado"
-                  className="inline-block rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-700"
+                  className="inline-block rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
                 >
                   Ver resultados
                 </Link>
@@ -82,7 +82,7 @@ function Home() {
                     </div>
                     <Link
                       to="/resultado"
-                      className="inline-block rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-700"
+                      className="inline-block rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
                     >
                       Ver resultados
                     </Link>
@@ -90,7 +90,7 @@ function Home() {
                 ) : (
                   <Link
                     to="/encuesta"
-                    className="inline-block rounded-md bg-blue-600 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="inline-block rounded-md bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
                     Iniciar encuesta
                   </Link>
@@ -100,7 +100,7 @@ function Home() {
         }
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
